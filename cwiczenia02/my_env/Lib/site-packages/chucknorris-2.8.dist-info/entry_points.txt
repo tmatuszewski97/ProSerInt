@@ -1,0 +1,3 @@
+[pmxbot_handlers]
+Chuck Norris quips = chucknorris.pmxbot:init
+
