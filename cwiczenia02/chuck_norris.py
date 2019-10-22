@@ -1,1 +1,3 @@
-from cwiczenia02.my_env.Lib import *
+import chucknorris.quips as q
+
+print(q.random('Janet'))
