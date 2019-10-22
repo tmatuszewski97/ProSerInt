@@ -2,3 +2,4 @@
 venv/
 links
 cwiczenia02/my_env/
+__pycache__/
