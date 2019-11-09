@@ -1,4 +1,3 @@
 .idea/
 venv/
-links
-cwiczenia02/my_env/
+django_env
