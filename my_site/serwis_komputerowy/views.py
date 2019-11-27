@@ -11,8 +11,6 @@ def index(request):
     return HttpResponse("Witaj, znajdujesz sie w indeksie serwisu komputerowego.")
 
 
-class getAdres (generics.ListAPIView):
+class GetAdres (generics.ListAPIView):
     queryset = Adres.objects.all()
     serializer_class = serializers.AdresSerializer
-
-
