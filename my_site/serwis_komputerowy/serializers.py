@@ -23,11 +23,10 @@ class KlientSerializer (serializers.ModelSerializer):
 class PracownikSerializer (serializers.ModelSerializer):
     class Meta:
         model = Pracownik
-        fields = '__all__'
-        read_only_fields = ['czyZalogowany']
+        exclude = ['id', 'login', 'haslo', 'telefon', 'czyZalogowany', 'adres']
 
 
 class ZgloszenieSerializer (serializers.ModelSerializer):
     class Meta:
         model = Zgloszenie
-        fields = '__all__'
+        exclude = ['firma']
