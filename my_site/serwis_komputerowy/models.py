@@ -11,6 +11,9 @@ class Adres(models.Model):
     nrLok = models.IntegerField(blank=True, null=True)
     kodPocztowy = models.CharField(max_length=6)
 
+    class Meta:
+        verbose_name_plural = 'adresy'
+
     def __str__(self):
         return '%s %s %s %s %s' % (self.miasto, self.ulica, self.nrDomu, self.nrLok, self.kodPocztowy)
 
@@ -21,6 +24,9 @@ class Klient(models.Model):
     telefon = models.CharField(max_length=15, blank=True, null=True)
     adresEmail = models.CharField(max_length=35)
     adres = models.OneToOneField(Adres, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'klienci'
 
     def __str__(self):
         return '%s %s %s %s' % (self.imie, self.nazwisko, self.telefon, self.adresEmail)
@@ -37,6 +43,11 @@ class Pracownik(models.Model):
     czyZalogowany = models.BooleanField()
     adres = models.OneToOneField(Adres, on_delete=models.CASCADE)
 
+
+    class Meta:
+        verbose_name_plural = 'pracownicy'
+
+
     def __str__(self):
         return '%s %s %s %s %s %s %s %s' % (self.imie, self.nazwisko, self.specjalizacja, self.login, self.haslo,
                                             self.telefon, self.adresEmail, self.czyZalogowany)
@@ -45,6 +56,9 @@ class Pracownik(models.Model):
 class Firma(models.Model):
     nazwa = models.CharField(max_length=35)
     adres = models.OneToOneField(Adres, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'firmy'
 
     def __str__(self):
         return '%s' % self.nazwa
@@ -75,6 +89,9 @@ class Zgloszenie(models.Model):
     klient = models.ForeignKey(Klient, on_delete=models.CASCADE)
     pracownik = models.ForeignKey(Pracownik, on_delete=models.CASCADE)
     firma = models.ForeignKey(Firma, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = 'zgloszenia'
 
     def __str__(self):
         return '%s %s %s %s %s %s %s %s %s' % (self.dataUtworzenia, self.dataDostarczeniaUrzadzenia,
