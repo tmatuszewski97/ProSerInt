@@ -18,7 +18,7 @@ class AdresSerializer(serializers.ModelSerializer):
 class DaneUzytkownikaSerializer(serializers.ModelSerializer):
     class Meta:
         model = DaneUzytkownika
-        field = '__all__'
+        fields = '__all__'
 
 
 class ZgloszenieSerializer(serializers.ModelSerializer):

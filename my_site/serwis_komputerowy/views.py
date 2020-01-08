@@ -27,6 +27,18 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
 
 
+class DaneUzytkownikaList(generics.ListCreateAPIView):
+    queryset = DaneUzytkownika.objects.all()
+    serializer_class = serializers.DaneUzytkownikaSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class DaneUzytkownikaDetail(generics.RetrieveUpdateAPIView):
+    queryset = DaneUzytkownika.objects.all()
+    serializer_class = serializers.DaneUzytkownikaSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
 class AdresList(generics.ListCreateAPIView):
     queryset = Adres.objects.all()
     serializer_class = serializers.AdresSerializer
