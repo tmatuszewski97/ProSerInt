@@ -1,33 +1,51 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Adres, Firma, Klient, Pracownik, Zgloszenie
+from .models import Adres, DaneUzytkownika, Zgloszenie
 from . import serializers
 from rest_framework import generics
-from django.views.generic.edit import CreateView;
+from rest_framework.views import APIView
+from rest_framework import permissions, authentication
+from rest_framework.response import Response
+from rest_framework import status
+from django.http import Http404
+from django.contrib.auth.models import User, Group
 
 
 # Create your views here.
-
 
 def index(request):
     return HttpResponse("Witaj na stronie serwisu komputerowego!")
 
 
-class GetPracownik(generics.ListAPIView):
-    queryset = Pracownik.objects.all()
-    serializer_class = serializers.PracownikSerializer
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
 
 
-class GetFirma(generics.ListAPIView):
-    queryset = Firma.objects.all()
-    serializer_class = serializers.FirmaSerializer
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
 
 
-class WyswietlZgloszenia(generics.ListAPIView):
-    queryset = Zgloszenie.objects.all()
-    serializer_class = serializers.PracownikZgloszenieSerializer
+class AdresList(generics.ListCreateAPIView):
+    queryset = Adres.objects.all()
+    serializer_class = serializers.AdresSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class DodajZgloszenie(generics.ListCreateAPIView):
+class AdresDetail(generics.RetrieveUpdateAPIView):
+    queryset = Adres.objects.all()
+    serializer_class = serializers.AdresSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class ZgloszenieList(generics.ListCreateAPIView):
     queryset = Zgloszenie.objects.all()
     serializer_class = serializers.ZgloszenieSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class ZgloszenieDetail(generics.RetrieveUpdateAPIView):
+    queryset = Zgloszenie.objects.all()
+    serializer_class = serializers.ZgloszenieSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]

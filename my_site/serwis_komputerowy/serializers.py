@@ -1,5 +1,12 @@
 from rest_framework import serializers
-from .models import Adres, Firma, Klient, Pracownik, Zgloszenie
+from .models import Adres, DaneUzytkownika, Zgloszenie
+from django.contrib.auth.models import User
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username']
 
 
 class AdresSerializer(serializers.ModelSerializer):
@@ -8,22 +15,10 @@ class AdresSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class FirmaSerializer(serializers.ModelSerializer):
+class DaneUzytkownikaSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Firma
-        exclude = ['id', 'adres']
-
-
-class KlientSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Klient
-        fields = '__all__'
-
-
-class PracownikSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Pracownik
-        exclude = ['id', 'login', 'haslo', 'telefon', 'czyZalogowany', 'adres']
+        model = DaneUzytkownika
+        field = '__all__'
 
 
 class ZgloszenieSerializer(serializers.ModelSerializer):
@@ -32,11 +27,10 @@ class ZgloszenieSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class PracownikZgloszenieSerializer(serializers.ModelSerializer):
-    pracownik = PracownikSerializer()
+class UzytkownicyAdresZgloszenieSerializer(serializers.ModelSerializer):
+    adres = AdresSerializer(read_only=True, many=True)
+    zgloszenie = ZgloszenieSerializer(source="Klienci", read_only=True, many=True)
 
     class Meta:
-        model = Zgloszenie
-        fields = ('dataUtworzenia', 'dataDostarczeniaUrzadzenia', 'typZgloszenia',
-                  'stanRealizacji', 'urzadzenie', 'trescZgloszenia',  'pracownik', 'odpowiedzPracownika', 'cena',
-                  'dataOdbioruUrzadzenia')
+        model = User
+        fields = ['id', 'username', 'adres', 'zgloszenie']

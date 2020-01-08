@@ -2,11 +2,12 @@ from django.urls import path
 from django.conf.urls import url
 from . import views
 
-
 urlpatterns = [
     path('', views.index, name='index'),
-    path('zgloszenie', views.WyswietlZgloszenia.as_view(), name="Lista zgłoszeń"),
-    path('zgloszenie/dodaj', views.DodajZgloszenie.as_view(), name="Nowe zgłoszenie"),
-    path('pracownicy', views.GetPracownik.as_view(), name="Lista pracowników"),
-    path('firma', views.GetFirma.as_view(), name="Nazwa firmy"),
+    path('users/', views.UserList.as_view(), name='UserList'),
+    path('users/<int:pk>/', views.UserDetail.as_view(), name='UserDetail'),
+    path('adress/', views.AdresList.as_view(), name='AdresList'),
+    path('adress/<int:pk>/', views.AdresDetail.as_view(), name='AdresDetail'),
+    path('notification/', views.ZgloszenieList.as_view(), name='NotificationList'),
+    path('notification/<int:pk>/', views.ZgloszenieDetail.as_view(), name='NotificationDetail'),
 ]
