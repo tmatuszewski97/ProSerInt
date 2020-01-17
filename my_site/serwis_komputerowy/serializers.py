@@ -24,7 +24,13 @@ class DaneUzytkownikaSerializer(serializers.ModelSerializer):
 class ZgloszenieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Zgloszenie
-        fields = '__all__'
+        exclude = ['tworcaZgloszenia']
+
+
+class ZgloszenieUserSerializer (serializers.ModelSerializer):
+    class Meta:
+        model = Zgloszenie
+        fields = ['urzadzenie', 'trescZgloszenia']
 
 
 class UzytkownicyAdresZgloszenieSerializer(serializers.ModelSerializer):

@@ -62,3 +62,25 @@ class ZgloszenieDetail(generics.RetrieveUpdateAPIView):
     queryset = Zgloszenie.objects.all()
     serializer_class = serializers.ZgloszenieSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+
+class ZgloszeniaUzytkownikaList (generics.ListCreateAPIView):
+    serializer_class = serializers.ZgloszenieSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Zgloszenie.objects.filter(tworcaZgloszenia=user)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(tworcaZgloszenia=user)
+
+
+class ZgloszeniaUzytkownikaDetail (generics.RetrieveUpdateAPIView):
+    serializer_class = serializers.ZgloszenieUserSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Zgloszenie.objects.filter(tworcaZgloszenia=user)
