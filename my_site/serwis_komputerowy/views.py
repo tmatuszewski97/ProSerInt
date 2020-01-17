@@ -21,52 +21,53 @@ def index(request):
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
-
+    permission_classes = [permissions.IsAdminUser]
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
+    permission_classes = [permissions.IsAdminUser]
 
 
 class DaneUzytkownikaList(generics.ListCreateAPIView):
     queryset = DaneUzytkownika.objects.all()
     serializer_class = serializers.DaneUzytkownikaSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class DaneUzytkownikaDetail(generics.RetrieveUpdateAPIView):
     queryset = DaneUzytkownika.objects.all()
     serializer_class = serializers.DaneUzytkownikaSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class AdresList(generics.ListCreateAPIView):
     queryset = Adres.objects.all()
     serializer_class = serializers.AdresSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class AdresDetail(generics.RetrieveUpdateAPIView):
     queryset = Adres.objects.all()
     serializer_class = serializers.AdresSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class ZgloszenieList(generics.ListCreateAPIView):
     queryset = Zgloszenie.objects.all()
     serializer_class = serializers.ZgloszenieSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class ZgloszenieDetail(generics.RetrieveUpdateAPIView):
     queryset = Zgloszenie.objects.all()
     serializer_class = serializers.ZgloszenieSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAdminUser]
 
 
 class ZgloszeniaUzytkownikaList (generics.ListCreateAPIView):
     serializer_class = serializers.ZgloszenieSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -79,7 +80,7 @@ class ZgloszeniaUzytkownikaList (generics.ListCreateAPIView):
 
 class ZgloszeniaUzytkownikaDetail (generics.RetrieveUpdateAPIView):
     serializer_class = serializers.ZgloszenieUserSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
