@@ -56,7 +56,7 @@ class Zgloszenie(models.Model):
     trescZgloszenia = models.CharField(max_length=200, blank=True, null=True)
     odpowiedzPracownika = models.CharField(max_length=200, blank=True, null=True)
     cena = models.CharField(max_length=35, blank=True, null=True)
-    pracownik = models.ForeignKey('auth.User', related_name='Pracownicy', on_delete=models.CASCADE)
+    pracownik = models.ForeignKey('auth.User', related_name='Pracownicy', blank=True, null=True, on_delete=models.CASCADE)
     tworcaZgloszenia = models.ForeignKey('auth.User', related_name='Klienci', on_delete=models.CASCADE)
 
     class Meta:
