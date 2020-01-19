@@ -4,16 +4,23 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    #widoki pracownicze - dla adminów
-    path('users/', views.UserList.as_view(), name='UserList'),
-    path('users/<int:pk>/', views.UserDetail.as_view(), name='UserDetail'),
-    path('users/data/', views.DaneUzytkownikaList.as_view(), name='UserData'),
-    path('users/data/<int:pk>/', views.DaneUzytkownikaDetail.as_view(), name='UserDataDetail'),
-    path('adressess/', views.AdresList.as_view(), name='AdressList'),
-    path('adressess/<int:pk>/', views.AdresDetail.as_view(), name='AdressDetail'),
-    path('notifications/', views.ZgloszenieList.as_view(), name='NotificationList'),
-    path('notifications/<int:pk>/', views.ZgloszenieDetail.as_view(), name='NotificationDetail'),
-    #widoki klientów
-    path('userNotifications/', views.ZgloszeniaUzytkownikaList.as_view(), name='UserNotification'),
-    path('userNotifications/<int:pk>/', views.ZgloszeniaUzytkownikaDetail.as_view(), name='UserNotificationDetail'),
+    # Widoki pracowników - adminów
+    path('admin/user/', views.UserList.as_view(), name='UserList'),
+    path('admin/user/<int:pk>/', views.UserDetail.as_view(), name='UserDetail'),
+    path('admin/order/', views.ZgloszenieList.as_view(), name='ZgloszenieList'),
+    path('admin/order/<int:pk>/', views.ZgloszenieDetail.as_view(), name='ZgloszenieDetail'),
+    path('admin/adress/', views.AdresList.as_view(), name='AdresList'),
+    path('admin/adress/<int:pk>/', views.AdresDetail.as_view(), name='AdresDetail'),
+    path('admin/personal/', views.DaneUzytkownikaList.as_view(), name='DaneUzytkownikaList'),
+    path('admin/personal/<int:pk>/', views.DaneUzytkownikaDetail.as_view(), name='DaneUzytkownikaDetail'),
+    # Widoki klientów
+    path('accounts/profile/', views.KlientDataList.as_view(), name='KlientDataList'),
+    path('accounts/profile/personal', views.KlientPersonalList.as_view(), name='KlientPersonalList'),
+    path('accounts/profile/personal/<int:pk>/', views.KlientPersonalDetail.as_view(), name='KlientPersonalDetail'),
+    path('accounts/profile/tel', views.DaneUzytkownikaKlientList.as_view(), name='DaneUzytkownikaKlientList'),
+    path('accounts/profile/tel/<int:pk>/', views.DaneUzytkownikaKlientDetail.as_view(), name='ZgloszenieKlientDetail'),
+    path('accounts/profile/order', views.ZgloszenieKlientList.as_view(), name='ZgloszenieKlientList'),
+    path('accounts/profile/order/<int:pk>/', views.ZgloszenieKlientDetail.as_view(), name='ZgloszenieKlientDetail'),
+    path('accounts/profile/adress', views.AdresKlientList.as_view(), name='AdresKlientList'),
+    path('accounts/profile/adress/<int:pk>/', views.AdresKlientDetail.as_view(), name='AdresKlientDetail'),
 ]

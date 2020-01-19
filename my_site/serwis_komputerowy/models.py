@@ -22,9 +22,9 @@ class Adres(models.Model):
 
 class DaneUzytkownika(models.Model):
     telefon = models.CharField(max_length=35)
-    specjalizacja = models.CharField(max_length=35, blank=True, null=True)
+    specjalizacja = models.CharField(max_length=120, blank=True, null=True)
     stazPracy = models.CharField(max_length=35, blank=True, null=True)
-    uzytkownik = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    uzytkownik = models.OneToOneField('auth.User', related_name='dane', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name_plural = 'dane uzytkownikow'
@@ -56,8 +56,10 @@ class Zgloszenie(models.Model):
     trescZgloszenia = models.CharField(max_length=200, blank=True, null=True)
     odpowiedzPracownika = models.CharField(max_length=200, blank=True, null=True)
     cena = models.CharField(max_length=35, blank=True, null=True)
-    pracownik = models.ForeignKey('auth.User', related_name='Pracownicy', blank=True, null=True, on_delete=models.CASCADE)
-    tworcaZgloszenia = models.ForeignKey('auth.User', related_name='Klienci', on_delete=models.CASCADE)
+    pracownik = models.ForeignKey('auth.User', related_name='pracownik', blank=True, null=True,
+                                  on_delete=models.SET_NULL)
+    tworcaZgloszenia = models.ForeignKey('auth.User', related_name='klient', blank=True, null=True,
+                                         on_delete=models.SET_NULL)
 
     class Meta:
         verbose_name_plural = 'zgloszenia'

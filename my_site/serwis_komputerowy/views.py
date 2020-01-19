@@ -3,12 +3,8 @@ from django.http import HttpResponse
 from .models import Adres, DaneUzytkownika, Zgloszenie
 from . import serializers
 from rest_framework import generics
-from rest_framework.views import APIView
-from rest_framework import permissions, authentication
-from rest_framework.response import Response
-from rest_framework import status
-from django.http import Http404
-from django.contrib.auth.models import User, Group
+from rest_framework import permissions
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -18,56 +14,68 @@ def index(request):
     return HttpResponse("Witaj na stronie serwisu komputerowego!")
 
 
-class UserList(generics.ListAPIView):
+# Widoki pracowników - adminów
+
+
+class UserList (generics.ListAPIView):
+    serializer_class = serializers.UserSerializer
+    permission_classes = [permissions.IsAdminUser]
     queryset = User.objects.all()
-    serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
-    permission_classes = [permissions.IsAdminUser]
 
-class UserDetail(generics.RetrieveAPIView):
+
+class UserDetail (generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.UserSerializer
+    permission_classes = [permissions.IsAdminUser]
     queryset = User.objects.all()
-    serializer_class = serializers.UzytkownicyAdresZgloszenieSerializer
+
+
+class ZgloszenieList (generics.ListCreateAPIView):
+    serializer_class = serializers.ZgloszenieSerializer
     permission_classes = [permissions.IsAdminUser]
+    queryset = Zgloszenie.objects.all()
 
 
-class DaneUzytkownikaList(generics.ListCreateAPIView):
-    queryset = DaneUzytkownika.objects.all()
-    serializer_class = serializers.DaneUzytkownikaSerializer
+class ZgloszenieDetail (generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.ZgloszenieSerializer
     permission_classes = [permissions.IsAdminUser]
+    queryset = Zgloszenie.objects.all()
 
 
-class DaneUzytkownikaDetail(generics.RetrieveUpdateAPIView):
-    queryset = DaneUzytkownika.objects.all()
-    serializer_class = serializers.DaneUzytkownikaSerializer
-    permission_classes = [permissions.IsAdminUser]
-
-
-class AdresList(generics.ListCreateAPIView):
-    queryset = Adres.objects.all()
+class AdresList (generics.ListCreateAPIView):
     serializer_class = serializers.AdresSerializer
     permission_classes = [permissions.IsAdminUser]
-
-
-class AdresDetail(generics.RetrieveUpdateAPIView):
     queryset = Adres.objects.all()
+
+
+class AdresDetail (generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.AdresSerializer
     permission_classes = [permissions.IsAdminUser]
+    queryset = Adres.objects.all()
 
 
-class ZgloszenieList(generics.ListCreateAPIView):
-    queryset = Zgloszenie.objects.all()
-    serializer_class = serializers.ZgloszenieSerializer
+class DaneUzytkownikaList (generics.ListCreateAPIView):
+    serializer_class = serializers.DaneUzytkownikaSerializer
     permission_classes = [permissions.IsAdminUser]
+    queryset = DaneUzytkownika.objects.all()
 
 
-class ZgloszenieDetail(generics.RetrieveUpdateAPIView):
-    queryset = Zgloszenie.objects.all()
-    serializer_class = serializers.ZgloszenieSerializer
+class DaneUzytkownikaDetail (generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = serializers.DaneUzytkownikaSerializer
     permission_classes = [permissions.IsAdminUser]
+    queryset = DaneUzytkownika.objects.all()
 
 
-class ZgloszeniaUzytkownikaList (generics.ListCreateAPIView):
-    serializer_class = serializers.ZgloszenieSerializer
+# Widoki klientów
+
+
+class ZgloszenieKlientList (generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.ZgloszenieKlientGetSerializer
+        else:
+            return serializers.ZgloszenieKlientPostUpdateSerializer
 
     def get_queryset(self):
         user = self.request.user
@@ -78,10 +86,100 @@ class ZgloszeniaUzytkownikaList (generics.ListCreateAPIView):
         serializer.save(tworcaZgloszenia=user)
 
 
-class ZgloszeniaUzytkownikaDetail (generics.RetrieveUpdateAPIView):
-    serializer_class = serializers.ZgloszenieUserSerializer
+class ZgloszenieKlientDetail(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.ZgloszenieKlientGetSerializer
+        else:
+            return serializers.ZgloszenieKlientPostUpdateSerializer
 
     def get_queryset(self):
         user = self.request.user
         return Zgloszenie.objects.filter(tworcaZgloszenia=user)
+
+
+class AdresKlientList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.AdresKlientSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Adres.objects.filter(uzytkownik=user)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(uzytkownik=user)
+
+
+class AdresKlientDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.AdresKlientSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return Adres.objects.filter(uzytkownik=user)
+
+
+class DaneUzytkownikaKlientList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.DaneUzytkownikaKlientSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return DaneUzytkownika.objects.filter(uzytkownik=user)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(uzytkownik=user)
+
+
+class DaneUzytkownikaKlientDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = serializers.DaneUzytkownikaKlientSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return DaneUzytkownika.objects.filter(uzytkownik=user)
+
+
+class KlientPersonalList(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.KlientGetSerializer
+        else:
+            return serializers.KlientPostUpdateSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return User.objects.filter(id=user.id)
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        serializer.save(id=user.id)
+
+
+class KlientPersonalDetail(generics.RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return serializers.KlientGetSerializer
+        else:
+            return serializers.KlientPostUpdateSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return User.objects.filter(id=user.id)
+
+
+class KlientDataList(generics.ListAPIView):
+    serializer_class = serializers.KlientDataSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return User.objects.filter(id=user.id)
